@@ -1,13 +1,15 @@
 pipeline {
-    agent { label 'slave1'}
+    agent none
     stages {
         stage('STAGE1') {
+            agent { label 'slave1'}
             steps {
                 sh 'sleep 5'
                 echo "this is stage1"
             }
         }
-        stage('STAGE2') {
+        stage('Build') {
+            agent { label 'slave2'}
             steps {
                 sh '''
                    #!/bin/bash
