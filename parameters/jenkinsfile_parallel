@@ -4,34 +4,33 @@ pipeline {
     stages {
         stage('STAGE1') {
             steps {
-                echo "This is stage 1 running"
-                sh 'sleep 10'
+               echo "This is stage1 running"
+               sh 'sleep 5'
             }
-
         }
-
-        stage('STAGE2') {
-            parallel{
-                stage('example1') {
+        
+        stage('PARALLEL TESTING') {
+            parallel {
+                stage('WINDOWS TESTING') {
                     steps {
-                    echo "This is stage 2 example 1 running"
-                    sh 'sleep 10'
-                    }
-                }
-            
-                stage('exapmle2') {
-                    steps {
-                    echo "This is stage 2 exaple2 running"
-                    sh 'sleep 10'
+                    echo "This is WINDOWS testing running"
+                    sh 'sleep 5'
                     }
                 }
 
+                stage('MACOS TESTING') {
+                    steps {
+                        echo "This is MACOS testing running"
+                        sh 'sleep 5'
+                    }
+                }
+            }
         }
-        stage('Final') {
+
+        stage('FINAL') {
             steps {
-                echo "This is FINAl stage running"
-                sh 'sleep 5'
-                }
+               echo "This is FINAL running"
+               sh 'sleep 5'
             }
         }
     }
