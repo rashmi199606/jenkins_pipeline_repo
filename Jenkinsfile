@@ -1,23 +1,69 @@
 pipeline {
-    agent none
+    agent any
+
+    parameters {
+        booleanParam(name: 'DEPLOY', description: 'Want to deploy to Production')
+    }
+    
+    environment {
+        CURRENT_ENV = 'prod'
+    }
+
     stages {
-        stage('STAGE1') {
-            agent { label 'slave1'}
+        stage('CEHCKOUT_REPOA') {
             steps {
-                sh 'sleep 5'
-                echo "this is stage1"
+                checkout ([ $class: 'scmGit'
+                    branches: [[name: '*/main']],
+                    extensions: [], 
+                    userRemoteConfigs: [[
+                        credentialsId: 'new',
+                        url: 'https://github.com/rashmi199606/rashmisecondrepo.git'
+                        ]]
+                    )]
+                sh '''
+                    echo GIT_BRANCH: $GIT_BRANCH
+                    echo BRANCH_NAME: $BRANCH_NAME
+                '''
             }
         }
-        stage('Build') {
-            agent { label 'slave2'}
+
+        stage('STAGE1 When branch main') {
+            when {
+                expression {
+                    return env.GIT_BRANCH == 'origin/main'
+                }
+            }
             steps {
+                echo "This is stage1 running"
+                sh ''' 
+                    pwd
+                    ls -lrt
+                    sleep 5
+                '''
+            }
+        }
+
+        stage('when environment') {
+            when {
+                environment name: 'CURRENT_ENV', value: 'prod'
+            }
+            steps {
+                echo "This is FINAL running"
                 sh '''
-                   #!/bin/bash
-                   pwd
-                   ls -lrt
-                   sleep 5
-                   echo "this is stage2"
-                '''   
+                    pwd
+                    ls -lrt
+                    sleep 5
+                '''
+            }
+        }
+
+        stage('when parameter') {
+            when {
+                expression { params.DEPLOY == true }
+            }
+            steps {
+                echo "This is FINAL running"
+                sh 'sleep 5'
             }
         }
     }
