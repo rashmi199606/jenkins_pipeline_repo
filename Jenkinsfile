@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('CEHCKOUT_REPOA') {
             steps {
-                checkout ([ $class: 'scmGit'
+                checkout ([ $class: 'GitSCM'
                     branches: [[name: '*/main']],
                     extensions: [], 
                     userRemoteConfigs: [[
