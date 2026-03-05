@@ -12,14 +12,15 @@ pipeline {
     stages {
         stage('CEHCKOUT_REPOA') {
             steps {
-                checkout ([ $class: 'GitSCM'
-                        branches: [[name: '*/main']],
-                        extensions: [], 
-                        userRemoteConfigs: [[
-                            credentialsId: 'new',
-                            url: 'https://github.com/rashmi199606/rashmisecondrepo.git'
+                checkout ([ $class: 'GitSCM',
+                            branches: [[name: '*/main']], 
+                            extensions: [], 
+                            userRemoteConfigs: [[
+                                credentialsId: 'new', 
+                                url: 'https://github.com/rashmi199606/rashmisecondrepo.git'
                             ]]
-                        )]
+                        ])
+               
                 sh '''
                     echo GIT_BRANCH: $GIT_BRANCH
                     echo BRANCH_NAME: $BRANCH_NAME
