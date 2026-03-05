@@ -1,9 +1,5 @@
 pipeline {
     agent any
-
-    parameters {
-        booleanParam(name: 'DEPLOY', description: 'Want to deploy to Production')
-    }
     
     environment {
         CURRENT_ENV = 'prod'
@@ -58,14 +54,5 @@ pipeline {
             }
         }
 
-        stage('when parameter') {
-            when {
-                expression { params.DEPLOY == true }
-            }
-            steps {
-                echo "This is FINAL running"
-                sh 'sleep 5'
-            }
-        }
     }
 }
