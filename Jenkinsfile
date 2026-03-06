@@ -1,10 +1,5 @@
 pipeline {
-    agent any
-    
-    environment {
-        CURRENT_ENV = 'prod'
-    }
-
+    agent any   
     stages {
         stage('CEHCKOUT_REPOA') {
             steps {
@@ -18,18 +13,12 @@ pipeline {
                         ])
                
                 sh '''
-                    echo GIT_BRANCH: $GIT_BRANCH
-                    echo BRANCH_NAME: $BRANCH_NAME
+                    echo 'This is checkout code repo'
                 '''
             }
         }
 
-        stage('STAGE1 When branch main') {
-            when {
-                expression {
-                    return env.GIT_BRANCH == 'origin/main'
-                }
-            }
+        stage('STAGE1') {
             steps {
                 echo "This is stage1 running"
                 sh ''' 
@@ -39,20 +28,5 @@ pipeline {
                 '''
             }
         }
-
-        stage('when environment') {
-            when {
-                environment name: 'CURRENT_ENV', value: 'prod'
-            }
-            steps {
-                echo "This is FINAL running"
-                sh '''
-                    pwd
-                    ls -lrt
-                    sleep 5
-                '''
-            }
-        }
-
     }
 }
